@@ -6,7 +6,9 @@ import com.test.comcast.model.AdCampaign;
 public interface IServices {
 	
 	public AdCampaign  addCampaign(AdCampaign adCampaign);
+	
 	public AdCampaign getCampaign(String partner_id);
+	
 	public List<AdCampaign> getAll();
 	
 

@@ -26,27 +26,34 @@ public class MyRestController {
 	IServices iServices;
 	
 	@RequestMapping(value="/ad",method=RequestMethod.POST,produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AdCampaign> print(@RequestBody AdCampaign adCampaign){
+	public ResponseEntity print(@RequestBody AdCampaign adCampaign){
 
-
-		return new ResponseEntity<AdCampaign>(iServices.addCampaign(adCampaign) ,HttpStatus.OK);
-
+		AdCampaign adFromStore = iServices.addCampaign(adCampaign);
+		
+		if(adCampaign == adFromStore)
+			return new ResponseEntity<AdCampaign>(adCampaign, HttpStatus.OK);
+		else
+			return new ResponseEntity<String>("Active AdCompaign is already there in the System. You cannot have more than one active AdCompaing.", HttpStatus.EXPECTATION_FAILED);
 	}
 
 	@RequestMapping(value="/listall",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity <List<AdCampaign>> getall(){
-
 
 		return new ResponseEntity<List<AdCampaign>>(iServices.getAll(),HttpStatus.OK);
 
 	}
 		
 
-	@RequestMapping(value="/getcampaign/{partner_id}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<AdCampaign> getcampaign(@PathVariable String partner_id){
+	@RequestMapping(value="/ad/{partner_id}",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity getcampaign(@PathVariable String partner_id){
 
-
-		return new ResponseEntity<AdCampaign>(iServices.getCampaign(partner_id),HttpStatus.OK);
+		AdCampaign adActive  = iServices.getCampaign(partner_id);
+		
+		if(null != adActive)
+			return new ResponseEntity<AdCampaign>(adActive,HttpStatus.OK);
+		else
+			return new ResponseEntity<String>("No Active AdCompaings Exists!!!",HttpStatus.OK);
+		
 
 	}
 
